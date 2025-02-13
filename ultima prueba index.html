@@ -1,0 +1,117 @@
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const HomeComponent = () => (
+  <div className="text-center p-6">
+    <h2 className="text-4xl font-extrabold">Bienvenido a MindAthlete</h2>
+    <p className="text-lg mt-4">Un espacio diseñado para atletas de alto rendimiento, para ayudarte a manejar el estrés y la ansiedad con actividades interactivas y relajantes.</p>
+  </div>
+);
+
+const JuegosComponent = () => {
+  const [counter, setCounter] = useState(0);
+  const resetCounter = () => setCounter(0);
+  return (
+    <div className="text-center p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-3xl font-bold">Juego de Reacción</h2>
+      <img src="/images/game.png" alt="Juego de reacción" className="mx-auto my-4 w-48" />
+      <p className="mt-2">Haz clic en el botón lo más rápido posible para mejorar tu concentración.</p>
+      <div className="mt-4">
+        <button onClick={() => setCounter(counter + 1)} className="px-6 py-3 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition">+</button>
+        <button onClick={resetCounter} className="ml-4 px-6 py-3 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 transition">Reiniciar</button>
+      </div>
+      <p className="mt-4 text-2xl font-semibold">Puntuación: {counter}</p>
+    </div>
+  );
+};
+
+const RespiraciónComponent = () => {
+  const [breathingStage, setBreathingStage] = useState("Inhala");
+  useEffect(() => {
+    const cycle = ["Inhala profundamente", "Retén el aire", "Exhala lentamente"];
+    let index = 0;
+    const interval = setInterval(() => {
+      setBreathingStage(cycle[index]);
+      index = (index + 1) % cycle.length;
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <div className="text-center p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-3xl font-bold">Ejercicio de Respiración</h2>
+      <img src="/images/breathing.png" alt="Ejercicio de respiración" className="mx-auto my-4 w-48" />
+      <p className="mt-2">Sigue el ciclo de respiración para relajarte.</p>
+      <h3 className="text-4xl font-bold text-blue-600 mt-4 animate-pulse">{breathingStage}</h3>
+    </div>
+  );
+};
+
+const MeditaciónComponent = () => {
+  return (
+    <div className="text-center p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-3xl font-bold">Meditación de Relajación</h2>
+      <img src="/images/meditation.png" alt="Meditación guiada" className="mx-auto my-4 w-48" />
+      <p className="mt-2">Reproduce la música para ayudarte a concentrarte y relajar tu mente.</p>
+      <audio controls className="mt-4 w-full">
+        <source src="/relaxing-music.mp3" type="audio/mpeg" />
+        Tu navegador no soporta el elemento de audio.
+      </audio>
+    </div>
+  );
+};
+
+const AyudaComponent = () => {
+  return (
+    <div className="text-center p-6 bg-white shadow-lg rounded-lg border border-blue-300">
+      <h2 className="text-3xl font-bold text-blue-700">Centro de Ayuda</h2>
+      <img src="/images/help.png" alt="Centro de ayuda" className="mx-auto my-4 w-48" />
+      <p className="mt-2 text-lg">Si necesitas apoyo, aquí tienes algunas opciones:</p>
+      <ul className="list-disc pl-5 mt-4 text-left inline-block text-blue-600">
+        <li><a href="tel:+123456789" className="text-blue-800 font-semibold underline hover:text-blue-900">Línea de ayuda 1</a></li>
+        <li><a href="tel:+987654321" className="text-blue-800 font-semibold underline hover:text-blue-900">Línea de ayuda 2</a></li>
+      </ul>
+      <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow-inner">
+        <h3 className="text-2xl font-semibold text-blue-600">Dato Curioso</h3>
+        <p className="mt-2 text-md">El ejercicio físico libera endorfinas, lo que ayuda a reducir el estrés y la ansiedad.</p>
+      </div>
+      <div className="mt-4 bg-gray-100 p-4 rounded-lg shadow-inner">
+        <h3 className="text-2xl font-semibold text-blue-600">Consejo</h3>
+        <p className="mt-2 text-md">Practica la gratitud: escribir tres cosas por las que estás agradecido cada día puede mejorar tu bienestar mental.</p>
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-gradient-to-b from-blue-200 to-blue-400 flex flex-col items-center p-6">
+        <motion.h1
+          className="text-5xl font-bold text-white mb-6 drop-shadow-lg"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          MindAthlete
+        </motion.h1>
+        <nav className="flex space-x-6 mb-6">
+          <Link to="/" className="text-white text-lg hover:text-gray-300">Inicio</Link>
+          <Link to="/juegos" className="text-white text-lg hover:text-gray-300">Juegos</Link>
+          <Link to="/herramientas" className="text-white text-lg hover:text-gray-300">Respiración</Link>
+          <Link to="/ejercicios" className="text-white text-lg hover:text-gray-300">Meditación</Link>
+          <Link to="/ayuda" className="text-white text-lg hover:text-gray-300">Ayuda</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<HomeComponent />} />
+          <Route path="/juegos" element={<JuegosComponent />} />
+          <Route path="/herramientas" element={<RespiraciónComponent />} />
+          <Route path="/ejercicios" element={<MeditaciónComponent />} />
+          <Route path="/ayuda" element={<AyudaComponent />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
